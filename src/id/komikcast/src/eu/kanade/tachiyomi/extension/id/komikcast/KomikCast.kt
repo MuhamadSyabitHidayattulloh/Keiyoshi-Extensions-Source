@@ -130,8 +130,7 @@ class KomikCast : HttpSource() {
 
     override fun pageListParse(response: Response): List<Page> {
         val result = response.parseAs<ChapterDetailResponse>()
-        val images = result.data.dataImages?.toSortedMap(compareBy { it.toIntOrNull() ?: Int.MAX_VALUE })
-            ?.values?.toList() ?: emptyList()
+        val images = result.data.data.images ?: emptyList()
         return images.mapIndexed { index, imageUrl ->
             Page(index, "", imageUrl)
         }
