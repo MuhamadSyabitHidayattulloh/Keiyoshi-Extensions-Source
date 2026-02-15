@@ -182,7 +182,7 @@ class Softkomik : HttpSource() {
     override fun getMangaUrl(manga: SManga): String = "$baseUrl/${manga.url}"
 
     // ======================== Chapters ========================
-    override fun chapterListRequest(manga: SManga): Request = GET("https://v2.softkomik.com/komik/${manga.url}/chapter?limit=9999999", headers)
+    override fun chapterListRequest(manga: SManga): Request = GET("https://v2.softdevices.my.id/komik/${manga.url}/chapter?limit=9999999", headers)
 
     override fun chapterListParse(response: Response): List<SChapter> {
         val dto = response.parseAs<ChapterListDto>()
