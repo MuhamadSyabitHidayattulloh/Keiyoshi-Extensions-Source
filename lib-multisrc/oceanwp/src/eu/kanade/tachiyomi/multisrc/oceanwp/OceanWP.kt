@@ -218,7 +218,7 @@ abstract class OceanWP(
         title = document.selectFirst("h1.single-post-title, h1.entry-title, h2.single-post-title, h2.entry-title")!!.text()
 
         val contentElement = document.selectFirst(".entry-content, .entry")!!
-        
+
         description = parseDescription(contentElement)
 
         genre = document
@@ -232,20 +232,16 @@ abstract class OceanWP(
         status = SManga.UNKNOWN
     }
 
-    private fun parseDescription(contentElement: Element): String {
-        return contentElement.select("p")
-            .eachText()
-            .filter { it.isNotBlank() }
-            .joinToString("\n")
-    }
+    private fun parseDescription(contentElement: Element): String = contentElement.select("p")
+        .eachText()
+        .filter { it.isNotBlank() }
+        .joinToString("\n")
 
-    private fun parseAuthor(contentElement: Element): String? {
-        return contentElement.select("li").firstNotNullOfOrNull { li ->
-            if (li.text().contains("Artists", ignoreCase = true)) {
-                li.selectFirst("em")!!.text().trim()
-            } else {
-                null
-            }
+    private fun parseAuthor(contentElement: Element): String? = contentElement.select("li").firstNotNullOfOrNull { li ->
+        if (li.text().contains("Artists", ignoreCase = true)) {
+            li.selectFirst("em")!!.text().trim()
+        } else {
+            null
         }
     }
 
@@ -294,17 +290,17 @@ abstract class OceanWP(
         }
     }
 
-    override fun pageListParse(document: Document): List<Page> {
-        return document.select(".entry-content img, .entry img, .gallery-icon img")
-            .mapNotNull { imageOrNull(it) }
-            .distinct()
-            .filterNot { url ->
-                url.contains("logo", ignoreCase = true) ||
-                    (url.contains("wp-content/uploads/", ignoreCase = true) &&
-                        (url.contains("-200x285") || url.contains("-150x") || url.contains("-100x")))
-            }
-            .mapIndexed { i, url -> Page(i, "", url) }
-    }
+    override fun pageListParse(document: Document): List<Page> = document.select(".entry-content img, .entry img, .gallery-icon img")
+        .mapNotNull { imageOrNull(it) }
+        .distinct()
+        .filterNot { url ->
+            url.contains("logo", ignoreCase = true) ||
+                (
+                    url.contains("wp-content/uploads/", ignoreCase = true) &&
+                        (url.contains("-200x285") || url.contains("-150x") || url.contains("-100x"))
+                    )
+        }
+        .mapIndexed { i, url -> Page(i, "", url) }
 
     override fun imageUrlParse(document: Document): String = throw UnsupportedOperationException()
 
